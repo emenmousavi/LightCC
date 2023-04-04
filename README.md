@@ -7,13 +7,13 @@ LightCC requires Python 3.x and the following Python packages:
 - pycardvalidate
 
 You can install these dependencies using the following command:
-    ```sh
+    ```
     pip install -r requirements.txt
     ```
     
 ## Usage
 To use LightCC, you can run the script from the command line using the following command:
-    ```sh
+    ```
     python lightcc.py
     ```
 
