@@ -1,0 +1,2 @@
+pycardvalidate
+requests
