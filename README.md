@@ -1,6 +1,8 @@
 # LightCC
 LightCC is a Python-based tool that generates and validates credit card numbers. It also provides functionality to test payment processing and obtain details about a given credit card.
 
+Please be informed that this is all for educational purpose.
+
 ## Requirements
 LightCC requires Python 3.x and the following Python packages:
 - requests
