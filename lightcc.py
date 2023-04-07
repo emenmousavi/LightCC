@@ -1,9 +1,10 @@
 import stripe
 import pycardvalidator
 import requests
+import os
 
 # Set up Stripe API keys
-stripe.api_key = "sk_test_51MuGRFBckCNTNNhSOCCQCS5XvTnIAiX18zVXBmcIwU0jPGm5nwpTbVdHpufleXSGxpAbzFTw6dujPy6NQbFi0Uxb00UjyH40iy"
+stripe.api_key = os.environ.get("STRIPE_API_KEY")
 stripe.api_version = "2020-08-27"
 
 # Function to generate a valid credit card number
