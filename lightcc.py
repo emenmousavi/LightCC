@@ -1,30 +1,27 @@
+import stripe
 import pycardvalidator
 import requests
-from faker import Faker
 
+# Set up Stripe API keys
+stripe.api_key = "sk_test_51MuGRFBckCNTNNhSOCCQCS5XvTnIAiX18zVXBmcIwU0jPGm5nwpTbVdHpufleXSGxpAbzFTw6dujPy6NQbFi0Uxb00UjyH40iy"
+stripe.api_version = "2020-08-27"
+
+# Function to generate a valid credit card number
 def generate_credit_card_number():
-    while True:
-        fake = Faker()
-        credit_card_number = fake.credit_card_number(card_type=None)
-        if pycardvalidator.validate(credit_card_number):
-            return credit_card_number
+    return pycardvalidator.generate()
 
+# Function to validate a credit card number
 def validate_credit_card_number(credit_card_number):
-    session = requests.Session()
-    response = session.get(f'https://api.binlist.io/validate?format=json&credit_card_number={credit_card_number}')
-    if response.status_code == 200:
-        data = response.json()
-        if 'valid' in data:
-            return data
-        else:
-            return {'error': 'Unable to validate credit card number'}
-    else:
-        return {'error': f'Error: {response.status_code} - {response.reason}'}
+    try:
+        pycardvalidator.parseString(credit_card_number)
+        return True
+    except:
+        return False
 
+# Function to get credit card details
 def get_credit_card_details(credit_card_number):
-    session = requests.Session()
-    response = session.get(f'https://api.binlist.io/lookup/{credit_card_number}')
-    if response.status_code == 200:
+    try:
+        response = requests.get(f'https://lookup.binlist.net/{credit_card_number}')
         data = response.json()
         credit_card_details = {}
         if 'bank' in data and 'numeric' in data['bank']:
@@ -38,30 +35,47 @@ def get_credit_card_details(credit_card_number):
         if 'brand' in data:
             credit_card_details['card_type'] = data['brand'].capitalize()
         return credit_card_details
-    else:
-        return {'error': f'Error: {response.status_code} - {response.reason}'}
+    except:
+        return {'error': 'Unable to retrieve credit card details'}
 
+# Function to process a payment using Stripe
+def process_payment(card_number, exp_month, exp_year, cvc, amount):
+    try:
+        response = stripe.PaymentIntent.create(
+            amount=amount,
+            currency="usd",
+            payment_method_data={
+                "type": "card",
+                "card": {
+                    "number": card_number,
+                    "exp_month": exp_month,
+                    "exp_year": exp_year,
+                    "cvc": cvc
+                }
+            },
+            confirm=True
+        )
+        if response.status == 'succeeded':
+            return {'status': 'success', 'message': 'Payment successful'}
+        else:
+            return {'status': 'error', 'message': 'Payment failed'}
+    except stripe.error.CardError as e:
+        err = e.error
+        return {'status': 'error', 'message': err.message}
+    except Exception as e:
+        return {'status': 'error', 'message': str(e)}
+
+# Function to test payment processing using Stripe
 def test_payment():
     card_number = input("Enter your credit card number: ")
     expiration_date = input("Enter your expiration date (MM/YY): ")
-    cvv_code = input("Enter your CVV code: ")
-    amount = "1"
-    try:
-        session = requests.Session()
-        response = session.post('https://donate.u24.gov.ua/payment/create',
-                                data={'card[number]': card_number,
-                                      'card[exp_month]': expiration_date.split("/")[0],
-                                      'card[exp_year]': expiration_date.split("/")[1],
-                                      'card[cvc]': cvv_code,
-                                      'amount': amount},
-                                headers={'User-Agent': 'Mozilla/5.0'})
-        if response.status_code == 200:
-            response_data = response.json()
-            if response_data['paid']:
-                print("Payment Successful")
-            else:
-                print("Payment Failed")
-        else:
-            print(f"Error Occurred: HTTP Status Code {response.status_code}")
-    except Exception as e:
-        print(f"Error Occurred: {e}")
+    exp_month, exp_year = expiration_date.split("/")
+    cvc_code = input("Enter your CVV code: ")
+    amount = input("Enter the payment amount: ")
+
+    response = process_payment(card_number, exp_month, exp_year, cvc_code, amount)
+
+    print(response['message'])
+
+# Test the payment function
+test_payment()
