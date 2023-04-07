@@ -7,6 +7,7 @@ Please be informed that this is all for educational purpose.
 LightCC requires Python 3.x and the following Python packages:
 - requests
 - pycardvalidate
+- stripe
 
 You can install these dependencies using the following command:
     ```
