@@ -1,13 +1,12 @@
-import random
 from faker import Faker
-import pycardvalidate
+import pycardvalidator
 import requests
 
 def generate_credit_card_number():
     while True:
         fake = Faker()
         credit_card_number = fake.credit_card_number(card_type=None)
-        if pycardvalidate.validate(credit_card_number):
+        if pycardvalidator.validate(credit_card_number):
             return credit_card_number
 
 def validate_credit_card_number(credit_card_number):
