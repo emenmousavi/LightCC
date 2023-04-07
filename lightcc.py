@@ -1,6 +1,6 @@
-from faker import Faker
 import pycardvalidator
 import requests
+from faker import Faker
 
 def generate_credit_card_number():
     while True:
@@ -62,6 +62,6 @@ def test_payment():
             else:
                 print("Payment Failed")
         else:
-            print("Error Occurred: HTTP Status Code ", response.status_code)
+            print(f"Error Occurred: HTTP Status Code {response.status_code}")
     except Exception as e:
-        print("Error Occurred: ", e)
+        print(f"Error Occurred: {e}")
