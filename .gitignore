@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# API keys
+STRIPE_PUBLISHABLE_KEY=pk_test_51N0kE6GkxUxiQj9lZBBLWAlkROMpC0pPnwsHPgSuDWtF3ewMgununECFm8BvFGes2aOcaR3VZzSJjVGtgz6lU3wp00VyegmAx0
+STRIPE_SECRET_KEY=sk_test_51N0kE6GkxUxiQj9lriGEFMwVgDadjPEvgx0jFiQ0Nxy2MOVSPUnfgO2Q60Mhip95WGAHWLqbb2fzPugPGu73FIQt00IUsaE7jE
