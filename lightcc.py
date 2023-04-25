@@ -1,11 +1,15 @@
-import stripe
 from faker import Faker
 import requests
-import os
+import braintree
 
-# Set up Stripe API keys
-stripe.api_key = os.environ.get("STRIPE_API_KEY")
-stripe.api_version = "2020-08-27"
+gateway = braintree.BraintreeGateway(
+  braintree.Configuration(
+    environment=braintree.Environment.Sandbox,
+    merchant_id='vs927kqm6855k22h',
+    public_key='43dn2btstvmknb8j',
+    private_key='72ded4af049dc520ba2566e5faa1d8a2'
+  )
+)
 
 def main_menu():
     print("​🇹​​🇭​​🇮​​🇸​ ​🇵​​🇷​​🇴​​🇬​​🇷​​🇦​​🇲​ ​🇲​​🇦​​🇩​​🇪​ ​🇧​​🇾​ ❝​🇪​​🇲​​🇪​​🇳​ ​🇲​​🇴​​🇺​​🇸​​🇦​​🇻​​🇮​❝")
@@ -50,33 +54,28 @@ def process_payment():
     card_number = input("Enter your credit card number: ")
     expiration_date = input("Enter your expiration date (MM/YY): ")
     exp_month, exp_year = expiration_date.split("/")
-    cvc_code = input("Enter your CVV code: ")
-    amount = input("Enter the payment amount: ")
+    cvv = input("Enter your CVV code: ")
+    amount = input("Enter the payment amount (Write it in cents): ")
 
-    try:
-        response = stripe.PaymentIntent.create(
-            amount=amount,
-            currency="usd",
-            payment_method_data={
-                "type": "card",
-                "card": {
-                    "number": card_number,
-                    "exp_month": exp_month,
-                    "exp_year": exp_year,
-                    "cvc": cvc_code
-                }
-            },
-            confirm=True
-        )
-        if response.status == 'succeeded':
-            print("[+] Payment successful")
-        else:
-            print("[-] Payment failed")
-    except stripe.error.CardError as e:
-        err = e.error
-        print(err.message)
-    except Exception as e:
-        print(str(e))
+    result = gateway.transaction.sale({
+        "amount": amount,
+        "credit_card": {
+            "number": card_number,
+            "expiration_date": expiration_date,
+            "cvv": cvv
+        }
+    })
+
+    if result.is_success:
+        print("Payment processed successfully")
+    else:
+        print(result.message)
+        
+def validate(card_number):
+    # Luhn Algorithm
+    r = [int(ch) for ch in str(card_number)][::-1]
+    x = sum(r[0::2]) + sum(sum(divmod(d * 2, 10)) for d in r[1::2])
+    return x % 10 == 0
 
 def main():
     while True:
