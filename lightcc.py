@@ -27,9 +27,9 @@ def validate_credit_card_number():
     credit_card_number = input("Enter the credit card number to validate: ")
     try:
         pycardvalidator.parseString(credit_card_number)
-        print("Valid credit card number")
+        print("[+] Valid credit card number")
     except:
-        print("Invalid credit card number")
+        print("[-] Invalid credit card number")
 
 def get_credit_card_details():
     credit_card_number = input("Enter the credit card number to get details: ")
@@ -49,7 +49,7 @@ def get_credit_card_details():
             credit_card_details['card_type'] = data['brand'].capitalize()
         print(credit_card_details)
     except:
-        print({'error': 'Unable to retrieve credit card details'})
+        print({[-] 'error': 'Unable to retrieve credit card details'})
 
 def process_payment():
     card_number = input("Enter your credit card number: ")
@@ -74,9 +74,9 @@ def process_payment():
             confirm=True
         )
         if response.status == 'succeeded':
-            print("Payment successful")
+            print([+] "Payment successful")
         else:
-            print("Payment failed")
+            print("[-] Payment failed")
     except stripe.error.CardError as e:
         err = e.error
         print(err.message)
@@ -97,7 +97,7 @@ def main():
         elif choice == '5':
             break
         else:
-            print("Invalid choice, please try again")
+            print("[-] Invalid choice, please try again")
 
 if __name__ == '__main__':
     main()
