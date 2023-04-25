@@ -12,22 +12,15 @@ def main_menu():
     print("")
     print("𝕴𝖙 𝖎𝖘 𝖔𝖓𝖑𝖞 𝖋𝖔𝖗 𝖊𝖉𝖚𝖈𝖆𝖙𝖎𝖔𝖓𝖆𝖑 𝖕𝖚𝖗𝖕𝖔𝖘𝖊!")
     print("Please choose an option:")
-    print("1. Generate a valid credit card number")
-    print("2. Validate a credit card number")
-    print("3. Get credit card details")
-    print("4. Process a payment using Stripe")
-    print("5. Exit")
+    print("1. Validate a credit card number")
+    print("2. Get credit card details")
+    print("3. Process a payment using Stripe")
+    print("4. Exit")
     choice = input("Enter your choice: ")
     return choice
 
-def generate_credit_card_number():
-    fake = Faker()
-    credit_card_number = fake.credit_card_number()
-    print(credit_card_number)
-
 def validate_credit_card_number():
     credit_card_number = input("Enter the credit card number to validate: ")
-    # validate credit card number using Faker
     if Faker().credit_card_number(card_type=None) == credit_card_number:
         print("[+] Valid credit card number")
     else:
@@ -89,18 +82,15 @@ def main():
     while True:
         choice = main_menu()
         if choice == '1':
-            print(generate_credit_card_number())
-            break
-        elif choice == '2':
             validate_credit_card_number()
             break
-        elif choice == '3':
+        elif choice == '2':
             get_credit_card_details()
             break
-        elif choice == '4':
+        elif choice == '3':
             process_payment()
             break
-        elif choice == '5':
+        elif choice == '4':
             break
         else:
             print("[-] Invalid choice, please try again")
