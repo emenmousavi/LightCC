@@ -34,25 +34,40 @@ def validate_credit_card_number():
     else:
         print("[-] Invalid credit card number")
 
-def get_credit_card_details():
-    credit_card_number = input("Enter the credit card number to get details: ")
-    try:
-        response = requests.get(f'https://lookup.binlist.net/{credit_card_number}')
-        data = response.json()
-        credit_card_details = {}
-        if 'bank' in data and 'numeric' in data['bank']:
-            credit_card_details['issuing_bank_number'] = data['bank']['numeric']
-        if 'country' in data and 'name' in data['country']:
-            credit_card_details['country'] = data['country']['name']
-        if 'scheme' in data:
-            credit_card_details['card_brand'] = data['scheme'].capitalize()
-        if 'type' in data:
-            credit_card_details['card_level'] = data['type'].capitalize()
-        if 'brand' in data:
-            credit_card_details['card_type'] = data['brand'].capitalize()
-        print(credit_card_details)
-    except:
-        print({'error': 'Unable to retrieve credit card details'})
+def get_credit_card_details(card_number):
+    url = f"https://lookup.binlist.net/{card_number}"
+    response = requests.get(url)
+
+    if response.status_code == 404:
+        return "Invalid card number"
+
+    data = response.json()
+    scheme = data["scheme"]
+    card_type = data["type"]
+    brand = data["brand"]
+    country = data["country"]["name"]
+
+    print(f"Scheme: {scheme}")
+    print(f"Type: {card_type}")
+    print(f"Brand: {brand}")
+    print(f"Issuing country: {country}")
+
+    expiration_date = input("Enter the expiration date (MM/YY): ")
+    if not re.match(r"^\d{2}/\d{2}$", expiration_date):
+        raise ValueError("Invalid expiration date format. Please enter in MM/YY format.")
+
+    month, year = expiration_date.split("/")
+    month = int(month)
+    year = int(year)
+
+    if month > 12 or month < 1:
+        raise ValueError("Invalid month. Please enter a value between 01 and 12.")
+
+    current_year = datetime.datetime.now().year % 100
+    if year < current_year or year > current_year + 10:
+        raise ValueError("Invalid year. Please enter a value between {current_year} and {current_year + 10}.")
+
+    print(f"Expiration date: {month}/{year:02}")
 
 def process_payment():
     card_number = input("Enter your credit card number: ")
