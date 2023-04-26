@@ -65,7 +65,7 @@ def process_payment():
     load_dotenv()
     
     # Prompt the user to enter their Braintree API credentials
-    While True:
+    while True:
         merchant_id = input("Enter your Braintree Merchant ID: ")
         public_key = input("Enter your Braintree Public Key: ")
         private_key = input("Enter your Braintree Private Key: ")
