@@ -1,7 +1,5 @@
 # LightCC
-LightCC is a Python-based tool that validates credit card numbers. It also provides functionality to test payment processing and obtain details about a given credit card.
-
-Please be informed that this is all for educational purpose.
+LightCC is a Python-based tool that validates credit card numbers, tests payment processing, and obtains details about a given credit card. Please note that this tool is for educational purposes only.
 
 ## Requirements
 LightCC requires Python 3.x and the following Python packages:
@@ -20,15 +18,15 @@ To use LightCC, you can run the script from the command line using the following
     python lightcc.py
     ```
 
-The script will prompt you to choose from a menu of options, including generating a random credit card number, validating a credit card number, testing payment processing, and obtaining credit card details.
+The script will prompt you to choose from a menu of options, including validating a credit card number, testing payment processing, and obtaining credit card details.
 
 ## Options
 
 - Validate a credit card number
-  - This option will prompt you to enter a credit card number, which will be validated using the BINList API.
+  - This option prompts you to enter a credit card number, which will be validated using the BINList API.
 
 - Test payment processing
-  - This option will prompt you to enter a credit card number and an amount, and then submit a payment request to a test payment processing endpoint.
+  - This option prompts you to enter a credit card number and an amount, and then submits a payment request to a test payment processing endpoint.
 
 - Get credit card details
   - This option will prompt you to enter a credit card number and will return details about the credit card, including the card scheme, type, brand, and issuing country.
