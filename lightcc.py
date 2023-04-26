@@ -1,6 +1,8 @@
 from faker import Faker
 import requests
 import braintree
+import os
+from dotenv import load_dotenv
 
 def main():
     choice = main_menu()
@@ -59,12 +61,44 @@ def process_payment():
     cvv = input("Enter your CVV code: ")
     amount = input("Enter the payment amount (Write it in cents): ")
 
+    # Load environment variables from .env file
+    load_dotenv()
+    
+    # Prompt the user to enter their Braintree API credentials
+    While True:
+        merchant_id = input("Enter your Braintree Merchant ID: ")
+        public_key = input("Enter your Braintree Public Key: ")
+        private_key = input("Enter your Braintree Private Key: ")
+        if not(merchant_id and public_key and private_key):
+            print("Error: API keys are missing or incorrect. Please enter the correct values:")
+            merchant_id = input("Enter your Merchant ID: ")
+            public_key = input("Enter your Public Key: ")
+            private_key = input("Enter your Private Key: ")
+            os.environ['MERCHANT_ID'] = merchant_id
+            os.environ['PUBLIC_KEY'] = public_key
+            os.environ['PRIVATE_KEY'] = private_key
+        try:
+            gateway = braintree.BraintreeGateway(
+                braintree.Configuration(
+                    environment=braintree.Environment.Sandbox,
+                    merchant_id=merchant_id,
+                    public_key=public_key,
+                    private_key=private_key
+                )
+            )
+            break
+        except Exception as e:
+            print(f"[-] Error: Failed to initialize gateway with the provided API keys. {e}")
+            os.environ['MERCHANT_ID'] = ''
+            os.environ['PUBLIC_KEY'] = ''
+            os.environ['PRIVATE_KEY'] = ''
+    
     gateway = braintree.BraintreeGateway(
         braintree.Configuration(
             environment=braintree.Environment.Sandbox,
-            merchant_id='vs927kqm6855k22h',
-            public_key='43dn2btstvmknb8j',
-            private_key='72ded4af049dc520ba2566e5faa1d8a2'
+            merchant_id=merchant_id,
+            public_key=public_key,
+            private_key=private_key
         )
     )
 
