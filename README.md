@@ -33,4 +33,4 @@ The script will prompt you to choose from a menu of options, including validatin
   - This option will prompt you to enter a credit card number and will return details about the credit card, including the card scheme, type, brand, and issuing country.
 
 ## Credits
-LightCC was developed by Amin Mousavi and is licensed under the [MIT license](https://github.com/emenmousavi/LightCC/blob/main/README.md).
+LightCC was developed by Emen M. and is licensed under the [MIT license](https://github.com/emenmousavi/LightCC/blob/main/README.md).
