@@ -5,7 +5,8 @@ LightCC is a Python-based tool that validates credit card numbers, tests payment
 LightCC requires Python 3.x and the following Python packages:
 - requests
 - braintree
-- faker
+- python-dotenv
+
 
 You can install these dependencies using the following command:
     ```
